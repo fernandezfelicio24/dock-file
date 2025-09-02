@@ -1,8 +1,8 @@
-ENV HTTP_PROXY=http://10.226.44.26:3128
-ENV HTTPS_PROXY=http://10.226.44.26:3128
-
 # Use official Python 3.12.3 slim image
 FROM python:3.12.3-slim
+
+ENV HTTP_PROXY=http://10.226.44.26:3128
+ENV HTTPS_PROXY=http://10.226.44.26:3128
 
 # Avoid interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
