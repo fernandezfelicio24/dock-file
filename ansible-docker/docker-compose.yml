@@ -1,24 +1,21 @@
-version: '3.9'
+version: "3.8"
 
 services:
   ansible:
-    build: .
-    container_name: ansible-controller
-    working_dir: /home/ansible
-    volumes:
-      # Mount your local playbooks and inventory
-      - ../playbooks:/ansible/playbooks
-      - ../inventory:/ansible/inventory
-      # Mount SSH keys (read-only)
-      - ~/.ssh:/root/.ssh:ro
-      # Optional: mount ansible.cfg
-      - ../ansible.cfg:/ansible/ansible.cfg:ro
-    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - http_proxy=http://10.226.44.26:3128
+        - https_proxy=http://10.226.44.26:3128
+    container_name: ansible
     tty: true
-    # Run a test command by default
-    command: >
-      sh -c "
-      python3 --version &&
-      ansible --version &&
-      echo '✅ Ansible environment is ready.'
-      "
+    stdin_open: true
+    restart: always
+    environment:
+      - http_proxy=http://10.226.44.26:3128
+      - https_proxy=http://10.226.44.26:3128
+      - no_proxy=127.0.0.1,localhost
+    volumes:
+      - /home/ansible:/ansible   # mount your entire ansible home
+    working_dir: /ansible        # drop directly into your files

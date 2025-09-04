@@ -1,29 +1,31 @@
-# Use official Python 3.12.3 slim image
+# Use Python 3.12.3 slim image
 FROM python:3.12.3-slim
 
-ENV HTTP_PROXY=http://10.226.44.26:3128
-ENV HTTPS_PROXY=http://10.226.44.26:3128
+# Proxy build args
+ARG http_proxy
+ARG https_proxy
 
-# Avoid interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
+# Proxy env inside container
+ENV http_proxy=${http_proxy}
+ENV https_proxy=${https_proxy}
+ENV no_proxy=127.0.0.1,localhost
 
-# Install required system packages
+# Install system dependencies + Ansible
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        openssh-client \
         sshpass \
+        openssh-client \
         git \
         curl \
         vim \
-        ca-certificates \
-        && rm -rf /var/lib/apt/lists/*
+        iputils-ping && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir ansible && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install Ansible
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir ansible
-
-# Set working directory
+# Default workdir
 WORKDIR /ansible
 
-# Default command: show versions
-CMD ["sh", "-c", "python3 --version && ansible --version"]
+# Default shell
+CMD [ "bash" ]
