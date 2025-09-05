@@ -18,4 +18,5 @@ services:
       - no_proxy=127.0.0.1,localhost
     volumes:
       - /home/ansible:/ansible   # mount your entire ansible home
+      - /home/dock-file
     working_dir: /ansible        # drop directly into your files
