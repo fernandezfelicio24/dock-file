@@ -19,5 +19,5 @@ services:
     volumes:
       - /home/ansible/.ssh:/root/.ssh        # Mount SSH keys
       - /home/ansible:/ansible   # mount your entire ansible home
-      - /home/dock-file:/home/dock-file 
+      - /home/dock-file:/dock-file 
     working_dir: /ansible        # drop directly into your files
